@@ -935,9 +935,8 @@
     else{el.style.display="none";}
   }
   function checkBackupNag(){
-    const hasData=Object.keys(allWeeks()).length>0;
-    const old=!settings.lastBackup||(Date.now()-settings.lastBackup)>7*86400000;
-    $("backupNag").style.display=(hasData&&old)?"flex":"none";
+    // Đã có đồng bộ mây nên không nhắc sao lưu nữa (tránh gây hiểu lầm cho người dùng).
+    $("backupNag").style.display="none";
   }
   $("nagBackup").onclick=doExport;
   $("nagClose").onclick=()=>{$("backupNag").style.display="none";};
