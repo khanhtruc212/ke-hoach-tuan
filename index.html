@@ -196,6 +196,60 @@
   .fitem .fi-del:hover{color:#e11d48}
   .fin-empty{color:var(--muted);font-size:13px;padding:14px;text-align:center}
 
+  /* ---- gamification ---- */
+  .gamestrip{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,var(--brand),var(--brand2));
+    color:#fff;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .gamestrip .lvl{font-size:15px;font-weight:900}
+  .gamestrip .lvl small{display:block;font-size:11px;font-weight:500;opacity:.9}
+  .gamestrip .gbadge{background:rgba(255,255,255,.2);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+  .gamestrip .xpbar{flex:1;min-width:140px}
+  .gamestrip .xpbar .track{height:9px;background:rgba(255,255,255,.28);border-radius:6px;overflow:hidden}
+  .gamestrip .xpbar .track i{display:block;height:100%;background:#fff;border-radius:6px;transition:width .3s}
+  .gamestrip .xpbar .lab{font-size:11px;opacity:.95;margin-top:3px}
+  #gamePanel{display:flex;gap:12px;flex-wrap:wrap}
+  #gamePanel .gp{flex:1;min-width:120px;background:var(--brand-soft);border-radius:12px;padding:14px;text-align:center}
+  #gamePanel .gp b{display:block;font-size:26px;font-weight:900;color:var(--brand)}
+  #gamePanel .gp span{font-size:12px;color:var(--muted)}
+  .badgewrap{display:flex;flex-wrap:wrap;gap:10px}
+  .badge{display:flex;flex-direction:column;align-items:center;gap:4px;width:96px;border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
+  .badge .ic{font-size:30px;line-height:1}
+  .badge .nm{font-size:11px;font-weight:700;color:var(--ink)}
+  .badge.locked{opacity:.38;filter:grayscale(1)}
+  .rewardadd,.goaladd{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .rewardadd input,.goaladd input{border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:inherit;font-size:14px;outline:none}
+  .rewardadd input#rewardText,.goaladd input#goalName{flex:1;min-width:180px}
+  .rewardadd input#rewardXp{width:120px}
+  .rewardadd input:focus,.goaladd input:focus{border-color:var(--brand)}
+  .rewardlist{display:flex;flex-direction:column;gap:6px}
+  .ritem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+  .ritem .rtxt{flex:1;min-width:0}
+  .ritem .rxp{font-size:12px;color:var(--muted);white-space:nowrap}
+  .ritem.ok{background:var(--brand-soft);border-color:var(--brand)}
+  .ritem .rdel{cursor:pointer;color:#9ca3af;border:none;background:transparent;font-size:15px}
+  .ritem .rdel:hover{color:#e11d48}
+
+  /* ---- goals ---- */
+  .goallist{display:flex;flex-direction:column;gap:12px}
+  .goal{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .goal.done{background:var(--brand-soft);border-color:var(--brand)}
+  .goal .ghead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .goal .gtitle{flex:1;min-width:0;font-weight:800;font-size:15px;border:none;background:transparent;outline:none}
+  .goal .gmeta{font-size:11px;color:var(--muted);white-space:nowrap}
+  .goal .gdel{cursor:pointer;color:#9ca3af;border:none;background:transparent;font-size:16px}
+  .goal .gdel:hover{color:#e11d48}
+  .goal .gprog{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .goal .gprog .track{flex:1;height:12px;background:#eef2f4;border-radius:7px;overflow:hidden}
+  .goal .gprog .track i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .3s}
+  .goal .gprog .pct{font-size:12px;font-weight:800;color:var(--brand);min-width:38px;text-align:right}
+  .goal .step{display:flex;align-items:center;gap:8px;padding:3px 0}
+  .goal .step input[type=checkbox]{width:16px;height:16px;accent-color:var(--brand);cursor:pointer;flex:0 0 auto}
+  .goal .step input[type=text]{flex:1;border:none;background:transparent;font-size:13px;outline:none}
+  .goal .step.done input[type=text]{text-decoration:line-through;color:var(--muted)}
+  .goal .step .sdel{cursor:pointer;color:#cbd5e1;border:none;background:transparent}
+  .goal .step .sdel:hover{color:#e11d48}
+  .goal .addstep{color:var(--brand);font-size:13px;cursor:pointer;background:none;border:none;padding:4px 0;font-weight:600}
+  .goal-empty{color:var(--muted);font-size:13px;text-align:center;padding:14px}
+
   /* ---- license ---- */
   .license{text-align:center;color:var(--muted);font-size:12px;margin-top:8px;font-weight:600}
 
@@ -225,8 +279,8 @@
     .brand h1,.brand .sub{color:#000}
     .card,.day,.scard{box-shadow:none;break-inside:avoid}
     .days{grid-template-columns:repeat(7,1fr)}
-    #viewStats[hidden],#viewFin[hidden]{display:none}
-    #backupNag,#syncBtn{display:none!important}
+    #viewStats[hidden],#viewFin[hidden],#viewGoals[hidden]{display:none}
+    #backupNag,#syncBtn,.gamestrip{display:none!important}
   }
 </style>
 </head>
@@ -264,9 +318,11 @@
 
   <div class="tabs">
     <button class="tab active" id="tabPlan">📋 Kế hoạch tuần</button>
+    <button class="tab" id="tabGoals">🎯 Mục tiêu</button>
     <button class="tab" id="tabFin">💰 Thu chi</button>
     <button class="tab" id="tabStats">📊 Thống kê &amp; hiệu suất</button>
     <div class="tools">
+      <button class="btn" id="reportBtn" title="Tạo ảnh tổng kết tuần để chia sẻ">📸 Khoe tuần</button>
       <button class="btn" id="installBtn" title="Cài đặt như một ứng dụng" style="display:none;background:var(--brand);color:#fff">📲 Cài app</button>
       <button class="btn" id="reminderBtn" title="Bật/tắt nhắc việc">🔕 Nhắc việc</button>
       <button class="btn" id="syncBtn" title="Đồng bộ điện thoại / máy tính">☁️ Đồng bộ</button>
@@ -288,6 +344,8 @@
 
   <!-- ===================== PLAN VIEW ===================== -->
   <div id="viewPlan">
+
+    <div class="gamestrip" id="gameStrip"></div>
 
     <div class="mantra">
       <span class="q">💬</span>
@@ -341,6 +399,19 @@
     </section>
   </div>
 
+  <!-- ===================== GOALS VIEW ===================== -->
+  <div id="viewGoals" hidden>
+    <section class="card">
+      <h2>🎯 Mục tiêu của bạn <span class="tag">Chia mục tiêu thành các bước nhỏ · tick từng bước để thấy tiến độ</span></h2>
+      <div class="goaladd">
+        <input type="text" id="goalName" placeholder="Mục tiêu mới (vd: Đọc 12 cuốn sách, Tiết kiệm 20 triệu...)" />
+        <input type="date" id="goalDate" title="Ngày muốn đạt được (không bắt buộc)" />
+        <button class="btn" id="goalAdd" style="background:var(--brand);color:#fff">+ Thêm mục tiêu</button>
+      </div>
+      <div id="goalList" class="goallist"></div>
+    </section>
+  </div>
+
   <!-- ===================== FINANCE VIEW ===================== -->
   <div id="viewFin" hidden>
     <div class="finsum">
@@ -378,6 +449,19 @@
 
   <!-- ===================== STATS VIEW ===================== -->
   <div id="viewStats" hidden>
+    <section class="card" style="margin-bottom:16px">
+      <h2>🏆 Thành tích của bạn <span class="tag">tính từ toàn bộ lịch sử</span></h2>
+      <div id="gamePanel"></div>
+      <h2 style="margin-top:16px">🎖️ Huy hiệu</h2>
+      <div id="badgeWrap" class="badgewrap"></div>
+      <h2 style="margin-top:16px">🎁 Phần thưởng tự đặt <span class="tag">đạt đủ XP là tự thưởng cho mình nhé</span></h2>
+      <div class="rewardadd">
+        <input type="text" id="rewardText" placeholder="Phần thưởng (vd: 1 ly trà sữa, xem 1 bộ phim...)" />
+        <input type="number" id="rewardXp" placeholder="Cần ... XP" min="10" step="10" />
+        <button class="btn" id="rewardAdd" style="background:var(--brand);color:#fff">+ Thêm</button>
+      </div>
+      <div id="rewardList" class="rewardlist"></div>
+    </section>
     <div class="statgrid">
       <div>
         <div class="cards3">
@@ -499,6 +583,8 @@
   /* ---------- storage ---------- */
   function loadSettings(){
     settings=JSON.parse(localStorage.getItem(SET)||"{}");
+    if(!Array.isArray(settings.goals))settings.goals=[];
+    if(!Array.isArray(settings.rewards))settings.rewards=[];
     if(settings.brand)$("brandName").textContent=settings.brand;
     if(settings.sub)$("brandSub").textContent=settings.sub;
     if(settings.pname)$("pname").textContent=settings.pname;
@@ -523,6 +609,8 @@
   const save=()=>{const k=wkey(monday);data._k=k;data._u=Date.now();localStorage.setItem(k,JSON.stringify(data));flash("Đã lưu ✓");cloudPushWeek(k,data);};
   function flash(m){const e=$("saveState");e.textContent=m;clearTimeout(t);t=setTimeout(()=>e.textContent="Sẵn sàng",1200);}
   function queueSave(){clearTimeout(t);t=setTimeout(()=>{save();renderSummary();},450);}
+  let stT=null;
+  function queueSettings(){clearTimeout(stT);stT=setTimeout(saveSettings,500);}
   function allWeeks(){const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith(PRE)&&k!==SET){try{o[k]=JSON.parse(localStorage.getItem(k));}catch(e){}}}return o;}
 
   /* ---------- helpers ---------- */
@@ -712,6 +800,7 @@
     $("weekDonutCap").textContent=totDone+"/"+totAll+" việc đã hoàn thành";
     // also refresh day donuts/counts cheaply by re-rendering days? keep light: re-render days for donut sync
     renderDaysDonuts();
+    renderGameStrip();
   }
   function renderDaysDonuts(){
     const cols=document.querySelectorAll("#days .day");
@@ -785,6 +874,197 @@
     }
   }
 
+  /* ---------- goals (mục tiêu) ---------- */
+  function goalMeta(g){
+    if(!g.date)return"";
+    const d=new Date(g.date);d.setHours(12,0,0,0);
+    const now=new Date();now.setHours(12,0,0,0);
+    const days=Math.round((d-now)/86400000);
+    if(g.done)return"✅ Hoàn thành";
+    if(days<0)return"⏰ Quá hạn "+(-days)+" ngày";
+    if(days===0)return"⏰ Hôm nay!";
+    return"⏳ Còn "+days+" ngày";
+  }
+  function renderGoals(){
+    const box=$("goalList");box.innerHTML="";
+    if(!settings.goals.length){box.innerHTML='<div class="goal-empty">Chưa có mục tiêu nào. Thêm mục tiêu đầu tiên ở trên ☝️</div>';return;}
+    settings.goals.forEach(g=>{
+      if(!Array.isArray(g.steps))g.steps=[];
+      const done=g.steps.filter(s=>s.done).length,total=g.steps.length,pct=total?Math.round(done/total*100):0;
+      g.done=total>0&&done===total;
+      const el=document.createElement("div");el.className="goal"+(g.done?" done":"");
+      const head=document.createElement("div");head.className="ghead";
+      const title=document.createElement("input");title.className="gtitle";title.value=g.name;title.placeholder="Tên mục tiêu";
+      title.oninput=()=>{g.name=title.value;queueSettings();};
+      const del=document.createElement("button");del.className="gdel";del.textContent="🗑️";del.title="Xoá mục tiêu";
+      del.onclick=()=>{if(confirm("Xoá mục tiêu này?")){settings.goals.splice(settings.goals.indexOf(g),1);saveSettings();renderGoals();}};
+      head.appendChild(title);
+      if(g.date){const meta=document.createElement("span");meta.className="gmeta";meta.textContent=goalMeta(g);head.appendChild(meta);}
+      head.appendChild(del);el.appendChild(head);
+      const prog=document.createElement("div");prog.className="gprog";
+      prog.innerHTML='<div class="track"><i style="width:'+pct+'%"></i></div><span class="pct">'+pct+'%</span>';
+      el.appendChild(prog);
+      g.steps.forEach(s=>{
+        const row=document.createElement("div");row.className="step"+(s.done?" done":"");
+        const cb=document.createElement("input");cb.type="checkbox";cb.checked=s.done;
+        const tx=document.createElement("input");tx.type="text";tx.value=s.t;tx.placeholder="Bước cần làm...";
+        cb.onchange=()=>{s.done=cb.checked;saveSettings();renderGoals();if(g.steps.length&&g.steps.every(z=>z.done))celebrate();};
+        tx.oninput=()=>{s.t=tx.value;queueSettings();};
+        tx.onblur=()=>{if(!tx.value.trim()){g.steps.splice(g.steps.indexOf(s),1);saveSettings();renderGoals();}};
+        const sd=document.createElement("button");sd.className="sdel";sd.textContent="✕";sd.title="Xoá bước";
+        sd.onclick=()=>{g.steps.splice(g.steps.indexOf(s),1);saveSettings();renderGoals();};
+        row.appendChild(cb);row.appendChild(tx);row.appendChild(sd);el.appendChild(row);
+      });
+      const add=document.createElement("button");add.className="addstep";add.textContent="＋ Thêm bước";
+      add.onclick=()=>{g.steps.push({t:"",done:false});saveSettings();renderGoals();
+        const ins=box.querySelectorAll(".goal .step input[type=text]");if(ins.length)ins[ins.length-1].focus();};
+      el.appendChild(add);box.appendChild(el);
+    });
+  }
+
+  /* ---------- gamification ---------- */
+  const LEVELS=[
+    {min:0,name:"Tân Binh"},{min:100,name:"Học Việc"},{min:300,name:"Chăm Chỉ"},
+    {min:700,name:"Kỷ Luật"},{min:1500,name:"Cao Thủ"},{min:3000,name:"Bậc Thầy"},{min:6000,name:"Huyền Thoại"}
+  ];
+  function dayHasDone(weeks,date){
+    const w=weeks[wkey(mondayOf(date))];if(!w||!w.days)return false;
+    const day=w.days[(date.getDay()+6)%7];if(!day)return false;
+    return (day.tasks||[]).some(t=>t.t&&t.t.trim()&&t.done);
+  }
+  function computeStreak(weeks){
+    let s=0;const d=new Date();d.setHours(12,0,0,0);
+    if(!dayHasDone(weeks,d))d.setDate(d.getDate()-1);
+    while(dayHasDone(weeks,d)){s++;d.setDate(d.getDate()-1);if(s>3650)break;}
+    return s;
+  }
+  function computeGame(){
+    const weeks=allWeeks();let doneTotal=0,habitTotal=0;
+    Object.values(weeks).forEach(w=>{
+      if(w.days)for(const k in w.days){(w.days[k].tasks||[]).forEach(t=>{if(t.t&&t.t.trim()&&t.done)doneTotal++;});}
+      if(w.habits)w.habits.forEach(h=>{habitTotal+=(h.marks||[]).reduce((a,b)=>a+b,0);});
+    });
+    const goals=settings.goals||[];
+    const goalStepsDone=goals.reduce((a,g)=>a+((g.steps||[]).filter(s=>s.done).length),0);
+    const goalsDone=goals.filter(g=>g.steps&&g.steps.length&&g.steps.every(s=>s.done)).length;
+    const xp=doneTotal*10+habitTotal*5+goalStepsDone*8+goalsDone*50;
+    let lvl=0;for(let i=0;i<LEVELS.length;i++){if(xp>=LEVELS[i].min)lvl=i;}
+    const cur=LEVELS[lvl],next=LEVELS[lvl+1]||null;
+    const pctToNext=next?Math.round((xp-cur.min)/(next.min-cur.min)*100):100;
+    return {xp,level:lvl+1,levelName:cur.name,nextName:next?next.name:null,nextMin:next?next.min:null,pctToNext,streak:computeStreak(weeks),doneTotal,habitTotal,goalsDone};
+  }
+  function computeBadges(g){return [
+    {ic:"🌱",nm:"Khởi đầu",on:g.doneTotal>=1},
+    {ic:"✅",nm:"10 việc",on:g.doneTotal>=10},
+    {ic:"💯",nm:"100 việc",on:g.doneTotal>=100},
+    {ic:"🔥",nm:"Chuỗi 3 ngày",on:g.streak>=3},
+    {ic:"🔥",nm:"Chuỗi 7 ngày",on:g.streak>=7},
+    {ic:"⚡",nm:"Chuỗi 30 ngày",on:g.streak>=30},
+    {ic:"🔁",nm:"Thói quen bền",on:g.habitTotal>=50},
+    {ic:"🎯",nm:"Đạt mục tiêu",on:g.goalsDone>=1},
+    {ic:"👑",nm:"Bậc Thầy",on:g.level>=6}
+  ];}
+  function renderGameStrip(){
+    const el=$("gameStrip");if(!el)return;const g=computeGame();
+    el.innerHTML=
+      '<div class="lvl">Cấp '+g.level+' <small>'+g.levelName+'</small></div>'+
+      '<div class="gbadge">🔥 '+g.streak+' ngày</div>'+
+      '<div class="gbadge">⭐ '+g.xp+' XP</div>'+
+      '<div class="xpbar"><div class="track"><i style="width:'+g.pctToNext+'%"></i></div>'+
+        '<div class="lab">'+(g.nextName?('Còn '+(g.nextMin-g.xp)+' XP → '+g.nextName+' 🚀'):'Đỉnh cao nhất! 👑')+'</div></div>';
+  }
+  function renderGamePanel(){
+    const g=computeGame();
+    $("gamePanel").innerHTML=
+      '<div class="gp"><b>'+g.level+'</b><span>Cấp · '+g.levelName+'</span></div>'+
+      '<div class="gp"><b>'+g.xp+'</b><span>Tổng XP</span></div>'+
+      '<div class="gp"><b>🔥'+g.streak+'</b><span>Chuỗi ngày</span></div>'+
+      '<div class="gp"><b>'+g.doneTotal+'</b><span>Việc đã xong</span></div>';
+    const bw=$("badgeWrap");bw.innerHTML="";
+    computeBadges(g).forEach(b=>{const d=document.createElement("div");d.className="badge"+(b.on?"":" locked");
+      d.innerHTML='<span class="ic">'+b.ic+'</span><span class="nm">'+b.nm+'</span>';bw.appendChild(d);});
+    const list=$("rewardList");list.innerHTML="";
+    if(!settings.rewards.length){list.innerHTML='<div class="goal-empty">Chưa có phần thưởng. Tự đặt phần thưởng để có động lực nhé!</div>';}
+    settings.rewards.slice().sort((a,b)=>a.xp-b.xp).forEach(r=>{
+      const reached=g.xp>=r.xp;const row=document.createElement("div");row.className="ritem"+(reached?" ok":"");
+      row.innerHTML='<span>'+(reached?"🎉":"🔒")+'</span><span class="rtxt"></span><span class="rxp">'+(reached?"Đạt rồi! · ":"")+r.xp+' XP</span><button class="rdel" title="Xoá">🗑️</button>';
+      row.querySelector(".rtxt").textContent=r.text;
+      row.querySelector(".rdel").onclick=()=>{settings.rewards.splice(settings.rewards.indexOf(r),1);saveSettings();renderGamePanel();};
+      list.appendChild(row);
+    });
+  }
+
+  /* ---------- báo cáo tuần (ảnh để khoe) ---------- */
+  function rr(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
+  function drawDonut(x,cx,cy,r,pct,color){
+    x.lineWidth=34;x.lineCap="round";
+    x.strokeStyle="#eef2f4";x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.stroke();
+    if(pct>0){x.strokeStyle=color;x.beginPath();x.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*pct/100);x.stroke();}
+    x.fillStyle=color;x.textAlign="center";x.font="900 78px Segoe UI, Arial";x.fillText(pct+"%",cx,cy+28);
+  }
+  function drawStat(x,cx,y,label,val,color){
+    x.textAlign="center";x.fillStyle="#6b7280";x.font="500 22px Segoe UI, Arial";x.fillText(label,cx,y);
+    x.fillStyle=color;x.font="800 30px Segoe UI, Arial";x.fillText(val,cx,y+40);
+  }
+  function wrapText(x,text,cx,y,maxW,lh){
+    const words=text.split(" ");let line="",yy=y;
+    for(const w of words){const test=line+w+" ";if(x.measureText(test).width>maxW&&line){x.fillText(line.trim(),cx,yy);line=w+" ";yy+=lh;}else line=test;}
+    x.fillText(line.trim(),cx,yy);
+  }
+  function buildReport(){
+    const g=computeGame();let totDone=0,totAll=0;
+    for(let i=0;i<7;i++){const s=dayStats(data.days[i]);totDone+=s.done;totAll+=s.total;}
+    const pct=totAll?Math.round(totDone/totAll*100):0;
+    const W=1080,H=1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;
+    const x=cv.getContext("2d");
+    const brand=getCSS("--brand")||"#16a34a",brand2=getCSS("--brand2")||"#15803d";
+    const grad=x.createLinearGradient(0,0,W,H);grad.addColorStop(0,brand);grad.addColorStop(1,brand2);
+    x.fillStyle=grad;x.fillRect(0,0,W,H);
+    rr(x,60,60,W-120,H-120,40);x.fillStyle="#fff";x.fill();
+    x.textAlign="center";
+    x.fillStyle=brand;x.font="900 48px Segoe UI, Arial";x.fillText(settings.brand||"KT Academy",W/2,175);
+    x.fillStyle="#6b7280";x.font="500 26px Segoe UI, Arial";x.fillText("Tổng kết tuần "+fmt(monday)+" → "+fmt(addD(monday,6)),W/2,222);
+    drawDonut(x,W/2,420,150,pct,brand);
+    x.fillStyle="#1f2937";x.font="800 32px Segoe UI, Arial";x.fillText(totDone+"/"+totAll+" việc đã hoàn thành",W/2,650);
+    drawStat(x,W/2-300,730,"Cấp độ",g.level+" · "+g.levelName,brand);
+    drawStat(x,W/2,730,"Chuỗi ngày","🔥 "+g.streak,brand);
+    drawStat(x,W/2+300,730,"Tổng XP","⭐ "+g.xp,brand);
+    const m=(data.fields&&data.fields.mantra)||"";
+    if(m){x.fillStyle="#15803d";x.font="italic 600 30px Segoe UI, Arial";wrapText(x,'“'+m+'”',W/2,880,W-280,42);}
+    x.fillStyle="#9ca3af";x.font="500 24px Segoe UI, Arial";x.fillText("Lập kế hoạch cùng "+(settings.brand||"KT Academy"),W/2,H-110);
+    return cv;
+  }
+  function shareReport(){
+    save();const cv=buildReport();
+    cv.toBlob(async blob=>{
+      if(!blob){flash("Không tạo được ảnh");return;}
+      const file=new File([blob],"tong-ket-tuan-"+iso(monday)+".png",{type:"image/png"});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){
+        try{await navigator.share({files:[file],title:"Tổng kết tuần",text:"Tuần của mình 💪"});return;}catch(e){}
+      }
+      const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=file.name;a.click();URL.revokeObjectURL(u);
+      flash("Đã tạo ảnh tổng kết ✓");
+    },"image/png");
+  }
+
+  function initGoalsGame(){
+    $("goalAdd").onclick=()=>{
+      const n=$("goalName").value.trim();if(!n)return;
+      settings.goals.push({id:Date.now(),name:n,date:$("goalDate").value||"",steps:[],done:false});
+      $("goalName").value="";$("goalDate").value="";saveSettings();renderGoals();renderGameStrip();
+    };
+    $("goalName").onkeydown=e=>{if(e.key==="Enter")$("goalAdd").click();};
+    $("rewardAdd").onclick=()=>{
+      const t=$("rewardText").value.trim(),xp=Number($("rewardXp").value);
+      if(!t||!xp||xp<=0){$("rewardXp").focus();return;}
+      settings.rewards.push({id:Date.now(),text:t,xp:xp});
+      $("rewardText").value="";$("rewardXp").value="";saveSettings();renderGamePanel();
+    };
+    $("rewardText").onkeydown=e=>{if(e.key==="Enter")$("rewardAdd").click();};
+    $("rewardXp").onkeydown=e=>{if(e.key==="Enter")$("rewardAdd").click();};
+    $("reportBtn").onclick=shareReport;
+  }
+
   /* ---------- celebrate ---------- */
   function celebrate(){
     const box=$("confetti");box.style.display="block";box.innerHTML="";
@@ -796,15 +1076,19 @@
   /* ---------- tabs ---------- */
   function setTab(which){
     $("viewPlan").hidden=which!=="plan";
+    $("viewGoals").hidden=which!=="goals";
     $("viewFin").hidden=which!=="fin";
     $("viewStats").hidden=which!=="stats";
     $("tabPlan").classList.toggle("active",which==="plan");
+    $("tabGoals").classList.toggle("active",which==="goals");
     $("tabFin").classList.toggle("active",which==="fin");
     $("tabStats").classList.toggle("active",which==="stats");
+    if(which==="goals")renderGoals();
     if(which==="fin")renderFin();
-    if(which==="stats")renderStats();
+    if(which==="stats"){renderStats();renderGamePanel();}
   }
   $("tabPlan").onclick=()=>setTab("plan");
+  $("tabGoals").onclick=()=>setTab("goals");
   $("tabFin").onclick=()=>setTab("fin");
   $("tabStats").onclick=()=>setTab("stats");
   setupFinEvents();
@@ -906,8 +1190,9 @@
         if(!(k in cloudKeys)||((lo._u||0)>(cloudKeys[k]||0))){lo._k=k;cloudPushWeek(k,lo);}
       }
       load();render();applyLicense();
+      if(!$("viewGoals").hidden)renderGoals();
       if(!$("viewFin").hidden)renderFin();
-      if(!$("viewStats").hidden)renderStats();
+      if(!$("viewStats").hidden){renderStats();renderGamePanel();}
       syncLabel("☁️ "+((fbUser.displayName||fbUser.email||"Đã đăng nhập").split(" ")[0]));
       flash("Đồng bộ xong ✓");
     }catch(e){console.error(e);syncLabel("☁️ Lỗi đồng bộ");}
@@ -1007,7 +1292,7 @@
   /* ---------- init ---------- */
   window.addEventListener("beforeunload",save);
   loadSettings();load();render();applyLicense();checkBackupNag();initCloud();
-  registerSW();initInstall();initReminders();
+  registerSW();initInstall();initReminders();initGoalsGame();
 })();
 </script>
 </body>
