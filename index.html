@@ -2,8 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Weekly Planner — Kế Hoạch Tụi Mình</title>
+<meta name="theme-color" content="#16a34a" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="KT Planner" />
 <style>
   :root{
     --bg:#eef2f4; --card:#ffffff; --ink:#1f2937; --muted:#6b7280;
@@ -260,6 +267,8 @@
     <button class="tab" id="tabFin">💰 Thu chi</button>
     <button class="tab" id="tabStats">📊 Thống kê &amp; hiệu suất</button>
     <div class="tools">
+      <button class="btn" id="installBtn" title="Cài đặt như một ứng dụng" style="display:none;background:var(--brand);color:#fff">📲 Cài app</button>
+      <button class="btn" id="reminderBtn" title="Bật/tắt nhắc việc">🔕 Nhắc việc</button>
       <button class="btn" id="syncBtn" title="Đồng bộ điện thoại / máy tính">☁️ Đồng bộ</button>
       <span class="save-state" id="saveState">Sẵn sàng</span>
       <button class="btn" id="printBtn">🖨️ In/PDF</button>
@@ -933,9 +942,73 @@
   $("nagBackup").onclick=doExport;
   $("nagClose").onclick=()=>{$("backupNag").style.display="none";};
 
+  /* ---------- PWA: cài app + chạy offline ---------- */
+  function registerSW(){
+    if("serviceWorker" in navigator){
+      window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});
+    }
+  }
+  let deferredPrompt=null;
+  function initInstall(){
+    window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;const b=$("installBtn");if(b)b.style.display="";});
+    window.addEventListener("appinstalled",()=>{deferredPrompt=null;const b=$("installBtn");if(b)b.style.display="none";flash("Đã cài app ✓");});
+    $("installBtn").onclick=async()=>{
+      if(!deferredPrompt){
+        alert("Để cài trên iPhone (Safari): bấm nút Chia sẻ ⬆️ → 'Thêm vào MH chính'.\nTrên Android (Chrome): menu ⋮ → 'Thêm vào màn hình chính'.");
+        return;
+      }
+      deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$("installBtn").style.display="none";
+    };
+  }
+
+  /* ---------- nhắc việc (notifications) ---------- */
+  let remFired=new Set(),remDay="";
+  function notify(title,body){try{new Notification(title,{body:body,icon:"icon-192.png"});}catch(e){}}
+  function updateReminderBtn(){const b=$("reminderBtn");if(!b)return;
+    const on=settings.reminders&&("Notification" in window)&&Notification.permission==="granted";
+    b.textContent=on?"🔔 Nhắc việc: BẬT":"🔕 Nhắc việc";
+  }
+  function reminderTick(){
+    if(!settings.reminders||!("Notification" in window)||Notification.permission!=="granted")return;
+    const now=new Date(),dayIso=iso(now);
+    if(dayIso!==remDay){remDay=dayIso;remFired=new Set();}
+    const raw=localStorage.getItem(wkey(mondayOf(now)));if(!raw)return;
+    let d;try{d=JSON.parse(raw);}catch(e){return;}
+    const today=(now.getDay()+6)%7,h=now.getHours(),m=now.getMinutes();
+    // briefing đầu ngày: số việc hôm nay (một lần/ngày, sau 8h sáng)
+    if(h>=8&&!remFired.has("brief")){
+      remFired.add("brief");
+      const ts=((d.days&&d.days[today]&&d.days[today].tasks)||[]).filter(x=>x.t&&x.t.trim());
+      const left=ts.filter(x=>!x.done).length;
+      if(left>0)notify("☀️ Chào ngày mới!","Hôm nay bạn có "+left+" việc cần làm. Cố lên nhé!");
+    }
+    // lịch hẹn theo giờ
+    if(d.sched){const key=today+"_"+h,v=d.sched[key];
+      if(v&&v.trim()&&m<3&&!remFired.has("s"+key)){remFired.add("s"+key);
+        notify("🗓️ Lịch "+(h<10?"0"+h:h)+":00",v.trim());}
+    }
+  }
+  function initReminders(){
+    $("reminderBtn").onclick=async()=>{
+      if(!("Notification" in window)){alert("Trình duyệt này không hỗ trợ thông báo nhắc việc.");return;}
+      if(settings.reminders&&Notification.permission==="granted"){
+        settings.reminders=false;saveSettings();updateReminderBtn();flash("Đã tắt nhắc việc");return;
+      }
+      let p=Notification.permission;
+      if(p!=="granted")p=await Notification.requestPermission();
+      if(p==="granted"){settings.reminders=true;saveSettings();updateReminderBtn();
+        notify("🔔 Đã bật nhắc việc","Mình sẽ nhắc bạn theo lịch trong ngày khi app đang mở.");}
+      else{alert("Bạn chưa cho phép thông báo.\nHãy bấm vào ổ khoá 🔒 cạnh địa chỉ web → bật Notifications, rồi thử lại.");}
+    };
+    updateReminderBtn();
+    setInterval(reminderTick,30000);
+    setTimeout(reminderTick,2500);
+  }
+
   /* ---------- init ---------- */
   window.addEventListener("beforeunload",save);
   loadSettings();load();render();applyLicense();checkBackupNag();initCloud();
+  registerSW();initInstall();initReminders();
 })();
 </script>
 </body>
